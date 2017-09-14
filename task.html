@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Tasks</title>
+</head>
+<body>
+<div>
+<button type="button" id="btn1">Task1</button>
+<button type="button" id="btn2">Task2</button>
+<button type="button" id="btn3">Task3</button>
+<button type="button" id="btn4">Task4</button>
+<button type="button" id="btn5">Task5</button>
+<button type="button" id="btn6">Result</button>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+   var socket = io("localhost:3030");
+   //var socket = io("uxd5-game.iego.cn:3030");
+   $("#btn1").click(function(){
+   	socket.emit("task",1);
+   })
+   $("#btn2").click(function(){
+   	socket.emit("task",2);
+   })
+   $("#btn3").click(function(){
+   	socket.emit("task",3);
+   })
+   $("#btn4").click(function(){
+   	socket.emit("task",4);
+   })
+   $("#btn5").click(function(){
+   	socket.emit("task",5);
+   })
+   $("#btn6").click(function(){
+   	socket.emit("task",6);
+   })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <title>three.js webgl - geometry - cube</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        background-color: #000000;
+        overflow: hidden;
+      }
+      p{
+        color: white;
+        font-size: 2vw;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+  
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="three.min.js"></script>
+    <script src="data-gui.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+      document.body.addEventListener('touchmove', function(event) {
+        event.preventDefault();
+      }, false);
+
+      var camera, scene, renderer;
+      var mesh,circle;
+
+      var socket = io("localhost:3030");
+      //var socket = io("uxd5-game.iego.cn:3030");
+
+      var accX=0, accY=0;
+      var magX=0, magY=0, magZ=0;
+      var movable = true
+      var log = {}, startTime=0, endTime=0, error=0;
+          log.time = [],log.error = [];
+      var tasks = ["0.2", "0.7", "0.9", "0.1", "0.5"], targetPos, ratio;
+
+      function startTask(pos){
+        targetPos = pos
+        alert("Please zoom the cube to level "+pos+" !")
+        startTime = Date.now();
+      }
+
+      socket.on('confirm', function(confirm){
+        movable = confirm
+          if(!confirm){
+              if(ratio!=targetPos)
+                error++
+              else{
+                endTime = Date.now();
+                log.time.push(endTime-startTime)
+                log.error.push(error)
+                error = 0;
+                alert("Success!")
+              }
+            }
+          })
+
+      document.onclick = function(){
+        if(!movable){
+          if(ratio!=targetPos)
+            error++
+          else{
+            endTime = Date.now();
+            log.time.push(endTime-startTime)
+            log.error.push(error)
+            error = 0;
+            alert("Success!")
+          }
+        }
+            
+        };
+
+      socket.on("task", function(task){
+        if(task==1)
+          startTask(tasks[0])
+        else if(task==2)
+          startTask(tasks[1])
+        else if(task==3)
+          startTask(tasks[2])
+        else if(task==4)
+          startTask(tasks[3])
+        else if(task==5)
+          startTask(tasks[4])
+        else if(task==6)
+          $("#result").text(JSON.stringify(log))
+      })
+
+      var setting = {
+            Zoom: false
+        };
+
+        //Add user interface for adding or removing the objects from the scene
+        var gui = new dat.gui.GUI();
+        gui.remember(setting);
+
+        gui.add(setting, 'Zoom').onFinishChange(function (isChecked) {
+            if (isChecked) {
+              initZoom()
+            } else {
+              $("canvas").unbind("mousemove")
+            }
+
+        });
+    
+      socket.on('acc', function(accx, accy, accz){
+          console.log(accx, accy, accz)
+            accX = accx;
+            accY = accy;
+        });
+
+      socket.on('mag', function(magx, magy, magz){
+          magX = magx;
+          magY = magy;
+          magZ = magz;
+        });
+
+        var oldMouseY, newMouseY;
+        var currentY=window.innerHeight*0.45;
+        socket.on('touchY', function(mouseY, height){
+          console.log(oldMouseY, newMouseY)
+          var offset=0
+          oldMouseY=newMouseY
+          newMouseY=mouseY
+          offset = (oldMouseY-newMouseY)/height*300;
+          currentY += offset
+          if(currentY<0)
+              currentY=0
+          else if(currentY>window.innerHeight)
+            currentY=window.innerHeight
+
+          if(movable)
+            ratio = (currentY/window.innerHeight*0.9).toFixed(1)
+          $("#zoomlevel").text(ratio)
+          if (ratio<0.5){
+            var scale = (ratio/0.5).toFixed(1)
+            mesh.scale.x=scale
+            mesh.scale.y=scale
+            mesh.scale.z=scale
+          }
+          else if(ratio==0.5){
+            mesh.scale.x=1
+            mesh.scale.y=1
+            mesh.scale.z=1  
+          }
+          else if(ratio>0.5){
+            var scale = (ratio/0.5).toFixed(1)
+            mesh.scale.x=scale
+            mesh.scale.y=scale
+            mesh.scale.z=scale
+          }
+
+        });
+
+        socket.on("moveStart", function(midX, midY){
+          oldMouseY=midY;
+          newMouseY=midY;   
+        })
+
+      init();
+      animate();
+
+      function init() {
+
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+        camera.position.z = 400;
+
+        scene = new THREE.Scene();
+
+
+        //Create helper grid
+        var gridHelper = new THREE.GridHelper(800, 50, 0x6B00B2, 0x2A2A2A);
+        gridHelper.position.y = -150;
+        gridHelper.position.x = 0;
+        scene.add(gridHelper);
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        var materials = [
+            new THREE.MeshBasicMaterial({color: 0x0000FF}),
+            new THREE.MeshBasicMaterial({color: 0x00FF00}),
+            new THREE.MeshBasicMaterial({color: 0xFF7F00}),
+            new THREE.MeshBasicMaterial({color: 0xFF0000}),
+            new THREE.MeshBasicMaterial({color: 0xFFFF00}),
+            new THREE.MeshBasicMaterial({color: 0xFFFFFF}),
+        ];
+
+        var geometry = new THREE.BoxBufferGeometry( 100, 100, 100 );
+        mesh = new THREE.Mesh( geometry, new THREE.MultiMaterial(materials) );
+        scene.add( mesh );
+
+        function onWindowResize() {
+          windowWidth=window.innerWidth;
+          windowHeight=window.innerHeight;
+
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+
+          renderer.setSize( windowWidth, windowHeight );
+
+        }
+
+        window.addEventListener( 'resize', onWindowResize, false );
+
+      }
+
+      $("canvas").height(window.innerHeight*0.9)
+
+      function empty3D(){
+        for(i=1; i<scene.children.length;i++){
+          scene.remove(scene.children[i])
+        }
+      }
+
+      var scaleMove = function(e){
+          ratio = (e.pageY/window.innerHeight).toFixed(1)
+          $("#zoomlevel").text(ratio)
+          if (ratio<0.5){
+            var scale = (ratio/0.5).toFixed(1)
+            mesh.scale.x=scale
+            mesh.scale.y=scale
+            mesh.scale.z=scale
+          }
+          else if(ratio==0.5){
+            mesh.scale.x=1
+            mesh.scale.y=1
+            mesh.scale.z=1  
+          }
+          else if(ratio>0.5){
+            var scale = (ratio/0.5).toFixed(1)
+            mesh.scale.x=scale
+            mesh.scale.y=scale
+            mesh.scale.z=scale
+          }
+        }
+
+      var rotateMove = function(e){
+        $("canvas").mousemove(function(e){
+          mesh.rotation.y = Math.PI*4*e.pageX/window.innerWidth
+          mesh.rotation.x = Math.PI*4*e.pageY/window.innerHeight
+        })
+      }
+
+      function initRotate(){
+        $("canvas").bind("mousemove",function(e){
+          rotateMove(e)
+        })
+      }
+
+      
+      function initZoom(){
+        $("canvas").bind("mousemove",function(e){
+          scaleMove(e)
+        })
+      }
+
+      $("canvas").click(function(){
+        if(movable){
+          movable = false
+          $("canvas").unbind("mousemove")
+        }
+        else{
+          movable = true
+          if(setting.Rotate){
+            $("canvas").bind("mousemove",function(e){
+              rotateMove(e)
+            })
+          }
+          else if(setting.Zoom){
+            $("canvas").bind("mousemove",function(e){
+              scaleMove(e)
+            })
+          }
+        }
+        console.log(movable)
+      })
+
+      function animate() {
+        requestAnimationFrame( animate );
+        renderer.render( scene, camera );
+      }
+    </script>
+    <p id="result"></p>
+    <p id="zoomlevel"></p>
+  </body>
+</html>

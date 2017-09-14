@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Scroll</title>
+<style>
+*{font-family: microsoft yahei;padding:0;margin:0;list-style:none;}
+#navigation {
+	position: fixed;
+	top: -66px;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 60px;
+	background-color: #006699;
+	-webkit-box-shadow: 0px 3px 3px 0px rgba(21, 21, 21, 0.1);
+	box-shadow: 0px 3px 3px 0px rgba(21, 21, 21, 0.1);
+	-webkit-transition: top .25s ease .5s;
+	transition: top .25s ease .5s;
+}
+#navigation p {
+	text-align: center;
+	color: #fff;
+	line-height:60px;
+}
+#percentageCounter {
+	position: fixed;
+	bottom: 10px;
+	right: 10px;
+}
+h1 {font-size: +2em;}
+.content {
+	width: 40%;
+	margin:50px auto;
+	padding:25px;
+	color:#fff;
+	background-color:#0082c3;
+	border-radius:5px;
+}
+p {margin-bottom: 1em;text-indent:2em;line-height:2;font-family:microsoft yahei;}
+</style>
+</head>
+<body>
+<div id="navigation">
+  <p>Genomic Medicine — An Updated Primer</p>
+</div>
+<div id="percentageCounter"><h1>0%</h1></div>
+<div class="content">
+  <p>Cathy, a 40-year-old mother of three, arrives in your office for her annual physical. She has purchased a commercial genomewide scan (see the Glossary at the end of this article), which she believes measures the clinically meaningful risk that common diseases will develop, and has completed her family history online using My Family Health Portrait (www.familyhistory.hhs.gov), a tool developed for this purpose by the U.S. Surgeon General. Her genomewide scan suggests a slightly elevated risk of breast cancer, but you correctly recognize that this information is of unproven value in routine clinical care. On importing Cathy's family-history file, your office's electronic health record system alerts you to the fact that Cathy is of Ashkenazi Jewish heritage and has several relatives with breast cancer, putting her at heightened risk for the hereditary breast and ovarian cancer syndrome. The system prompts you to discuss Cathy's risk of breast and ovarian cancer during the visit. Considering both her family history and ancestry, you refer Cathy to a health care professional with advanced genetics training for consultation.</p>
+
+  <p>In the coming months Cathy elects to have her DNA tested for mutations in BRCA1 and BRCA2, the genes associated with hereditary breast and ovarian cancer syndrome, and to undergo a mammographic examination. Although the results of her genetic tests are negative, her mammogram reveals a suspicious abnormality. A biopsy is performed, and breast cancer is detected. Surgery is successful. Pathological examination of tissue from the excised tumor reveals that it is positive for estrogen-receptor protein and negative for human epidermal growth factor receptor type 2 (HER2); the lymph glands are free of cancer cells. Genetic-expression profiling of the tumor indicates a relatively high risk of recurrent cancer, and Cathy elects to receive adjuvant chemotherapy followed by treatment with tamoxifen. Five years later, the cancer has not recurred.</p>
+
+  <p>Remarkable advances have been made in understanding the human genome's contribution to health and disease since the first Genomic Medicine series was launched in the Journal in 2002.1,2 The vignette about Cathy illustrates the strengths and limitations of these advances. Completion of the Human Genome Project in 20033,4 was a major driver for the current period of biomedical discovery, and the pace continues to accelerate. This project spurred the development of innovations with extraordinary benefits. Initially, clinically useful discoveries derived from the Human Genome Project yielded improvements in “genetic medicine” — that is, the use of knowledge about single genes to improve the diagnosis and treatment of single-gene disorders. However, our increased understanding of the interactions between the entire genome and nongenomic factors that result in health and disease is paving the way for an era of “genomic medicine,” in which new diagnostic and therapeutic approaches to common multifactorial conditions are emerging.</p>
+
+  <p>As a result of genomic discoveries, increasing numbers of clinical guidelines now suggest incorporating genomic tests or therapeutics into routine care. In some cases, the rapidity of translation has sparked debate regarding the level of evidence of clinical benefit needed to introduce new, and potentially costly, medical technologies.5,6 Although the effect of genomic discovery on the day-to-day practice of medicine has not been well quantified, it probably remains small in primary care and nonacademic settings as compared with, for example, oncology practice in an academic medical center. Regardless of where medicine is practiced, genomics is inexorably changing our understanding of the biology of nearly all medical conditions. How can any clinician understand the diagnosis and treatment of breast cancer, much less explain it to a patient such as Cathy, without a rudimentary understanding of genomic medicine?</p>
+
+  <p>Here, laying the groundwork for the rest of this series, we review key conceptual and technological advances in genomics that have occurred since the first series appeared in 2002. Readers who wish to review core principles of genetics and genomics are encouraged to revisit that first primer.1 A glossary of key terms appears in this article and will be updated throughout the course of the Genomic Medicine series.</p>
+
+  <h4>DEFINING THE GENE AND ITS REGULATION</h4>
+  <p>The question of how genes are defined and regulated is deceptively simple. However, the answer has become increasingly complex and remains a work in progress. Gaining a comprehensive understanding of gene structure and regulation is substantially more than an academic exercise — it provides avenues to develop better diagnostic, prognostic, preventive, and therapeutic approaches to both rare and common diseases.</p>
+  <p>The gene was traditionally defined as a unit of heredity. Once DNA had been identified as the basis of heredity, and the central dogma of molecular biology (DNA→RNA→protein) had been established, the gene was defined as a segment of DNA encoding a protein.7 But with the discovery of new classes of RNA, the traditional definition of a gene has required re-examination. The emerging picture of gene regulation depicts interdependent layers and webs of control consisting of interactions of DNA with regulatory proteins and RNA molecules that are akin to the interactions that occur in computer circuitry. This development has led to the rise of sophisticated “systems biology” approaches to understanding regulation.8</p>
+  <p>The Increasing Complexity of the Central Dogma of Molecular Biology.).One of the more remarkable stories to unfold in biology since 2002 is the diverse and ubiquitous role of small RNA molecules in gene regulation.24 Evidence suggests that this class of molecules contributes to disease pathogenesis, particularly in cancer25 and diseases caused by dysregulation of the immune system.26 Tests based on expression patterns of microRNAs (miRNAs) in tumors can augment traditional pathological techniques for determining the cell type giving rise to tumors27; miRNAs are endogenous noncoding RNA molecules, usually 22 nucleotides in length, that inhibit translation of their target RNAs. Similar in concept to the miRNA is the small, or short, interfering RNA (siRNA), which binds to complementary mRNA molecules and represses translation through degradation. Rationally designed synthetic siRNA molecules are currently being tested in advanced clinical trials.28</p>
+  <p>The rigorous comparison of the full genome sequences of organisms from bacteria to the chimpanzee has contributed greatly to our understanding of human gene structure and regulation. Table 1TABLE 1 Representative List of Organisms with Fully Sequenced Genomes. provides an abbreviated list of organisms whose genomes have been fully sequenced.9-18 “Comparative genomics” relies on the fact that DNA sequences that are critical to gene function are typically conserved across species. Such cross-species comparisons have shown that although the human genome contains approximately 20,000 protein-coding genes9,19 (a relatively small number — both cows20 and mustard plants21 have more), we make protean use of them. Close inspection reveals that some human genes are nested within other genes, that genes can occur on forward and reverse strands of the same DNA sequence, and that a single gene can encode multiple proteins or RNA molecules. Moreover, a great diversity of regulatory sequences in DNA can be located anywhere from inside the gene they affect to a great distance from that gene.22 Protein–DNA and RNA–DNA interactions and chemical modifications of DNA that do not affect the primary sequence also affect gene expression. Increasingly, the three-dimensional structure of DNA is recognized as playing an important role in regulating gene expression.23 Regulation of the transcription of DNA to RNA is only the first layer of control of gene expression in humans — alternative splicing (the processing of newly synthesized RNA molecules into the final functional RNA molecule) and regulation of translation (the process by which ribosomes read messenger RNA [mRNA] molecules to create proteins) are also tightly regulated (Figure 1FIGURE 1</p>
+
+<h4>MEASUREMENT OF VARIATION</h4>
+<p>The landscape of molecular diagnostics is changing rapidly. In the pregenomics era, genetic diagnosis focused mainly on conditions caused by mutations in single genes that required the detection of just one or a handful of mutations. Now the focus is shifting to highly multiplexed tests that detect thousands — even millions — of variants at once.41 Computer-chip technologies combined with microscopical fluorescence detection allow the mass manufacture of highly efficient and accurate gene chips. In 2010, a single silicon chip can detect well over 1 million different base-pair variations in a person's genome in a few hours for a few hundred dollars. Generating the same amount of information in 2002, when the first article in the Genomic Medicine series appeared, would have required months of work by a laboratory team and hundreds of electrophoresis gels, at a cost of more than $500,000.</p>
+
+<p>Clinical diagnostic laboratories continue to use assays based on the sequence-specific binding of short complementary DNA probes (oligonucleotides) to DNA samples from patients in order to detect mutations associated with single-gene disorders. Generally, these assays rely on the polymerase chain reaction (PCR) to amplify regions of interest in a patient's DNA; the PCR product is then analyzed for the presence or absence of mutations. New approaches, including the use of gene chips and sequencing, are rapidly eclipsing traditional methods of detecting human genetic variation and mutations.</p>
+
+<p>Gene chips consist of a highly ordered microscopic matrix of sequence-specific oligonucleotides tethered to a solid surface, known as a microarray (Figure 3FIGURE 3
+Microarray Technologies.). To perform a genomewide SNP scan such as the type purchased by Cathy, DNA is isolated from a sample obtained from a patient, cut into small fragments, labeled with a fluorescent dye, and then incubated with the silicon chip. The fragments bind to the tethered oligonucleotides in a sequence-specific manner, and sophisticated scanning hardware and signal-processing software analyze the pattern and intensity of the fluorescence signal to determine the sequences present in the sample. Barring human error in the laboratory, current clinical assays typically provide analytical sensitivities and specificities of more than 99.5%. Chip technologies have been adapted for use in a variety of clinical applications, including measurement of changes in structural DNA in patients with unexplained mental retardation42 and DNA expression profiling in the analysis of tumor samples.43 High-throughput genotyping can also be achieved with technologies based on the use of microfluidics and microscopic beads coated with oligonucleotides.44</p>
+
+<p>The technology used to determine the complete DNA sequence of an individual person is also moving forward rapidly (Figure 4FIGURE 4
+Sequencing Technologies., and the interactive graphic available with the full text of this article at NEJM.org). Until very recently, even the most sophisticated automated-sequencing devices relied on strategies and chemistry invented in the 1970s. Commercial sequencing machines now make use of diverse methods.45 Each has strengths and weaknesses, but all are markedly faster and less expensive than the methods used to generate the first complete human genome sequences. Newer approaches have improved fidelity by deliberately sequencing the same section of DNA multiple times in a highly parallel manner. The sequence data are then assembled with the use of sophisticated computer programs, a feat that requires considerable computational power. New sequencing methods based on nanotechnologies may further enhance accuracy while reducing costs.46 The goal of completely sequencing a human genome for $1,000 is in sight. Affordable, high-throughput genome sequencing will be a key tool in biomedical research for the foreseeable future. One can envision how sequencing might augment areas of clinical practice as disparate as newborn screening, drug selection (pharmacogenomics), and risk-reduction strategies for common complex conditions.</p>
+
+<p>Two clinical axioms familiar to every medical intern should be heeded when contemplating the clinical use of high-throughput SNP genotyping or DNA sequencing. First, “Don't order a test unless you know what to do with the result.” For instance, years of experience with sequencing the BRCA1 and BRCA2 genes for clinical purposes has yielded thousands of sequence variants in these two genes, many of which are rare and of unknown significance. Population-level sequencing will provide the first truly unbiased look at 20,000 genes that have rarely been sequenced in “normal” persons, and it will probably reveal that we understand genotype–phenotype correlations even less well than we currently suppose. Second, “When you order 20 tests, each with 95% specificity, you are likely to get at least one false positive result.” Even if sequencing is 99.9999% accurate, a full diploid genome sequence will contain 6000 errors. Separating the wheat from the chaff will be a considerable challenge. Highly accurate sequencing will be required, and approaches are being developed to achieve this through very-high-fidelity primary-sequence production coupled with redundant sequencing of the same region to check for errors. Such approaches will not obviate the need for large population-based studies to help define genotype–phenotype correlations. Harmonizing research and clinical informatics across the U.S. health care system to create a longitudinal living laboratory for observational research would facilitate such studies. On a practical level, advanced medical informatics systems will be critical for clinicians hoping to use sequence information in patient care.</p>
+
+<h4>FUTURE DIRECTIONS</h4>
+
+<p>The wealth of scientific discovery generated over the past 10 years is unparalleled in the history of biomedicine. Moreover, the rate of discovery is accelerating. At the outset of the past decade, the identification of gene mutations causing single-gene disorders was largely a cottage industry, conducted by individual laboratories studying extended families. By the end of the decade, genomewide association studies targeting gene associations for complex conditions involved collaborations of research groups spanning the globe. International collaborations of large-scale sequencing centers are generating terabytes of sequence data at speeds and costs that seemed inconceivable 5 years ago. Much discovery now takes place with the use of a computer connected by means of the Internet to a wealth of databases containing information on genotype and phenotype for humans and other model organisms.</p>
+
+<p>The ability to measure human genetic variation reliably and inexpensively in research settings has fueled and shaped the movement toward personalized medicine in health care. Although personalized medicine has many definitions, most share the core idea that any one patient's health is best managed by tailoring preventive measures and treatment to personal preferences as well as to the patient's particular environmental and biologic — including genomic — attributes. There is an inherent, unresolved tension between genomics-enabled personalized medicine and the tenets of population-based, evidence-based medicine.47 However, there is no reason that the two approaches to caring for patients should be in opposition. A first step to bridge genomics-enabled medicine and evidence-based medicine would be to collect and store DNA from enrollees in most new clinical trials of drugs and devices. With appropriate consent, such samples could provide a resource for learning about the role of genomic variation in treatment response. There is also a need for well-designed prospective clinical trials that measure patient-oriented outcomes of selected genomic applications (e.g., in the arena of pharmacogenomics) for which the advantages of introducing new technology over using standard care are not immediately evident. Creative solutions are being rapidly developed in the public and private sectors to allow for translational research that will help bridge the gap between the worlds of personalized medicine and evidence-based medicine.48,49</p>
+
+<p>The articles in this series will provide a sampling of the state of the art of genomics in biomedicine, although readers should recognize that the reach of genomics extends to scientific disciplines such as agriculture, paleontology, and renewable energies. The articles will appear regularly and will cover topics from the nuts and bolts of genomewide association studies to cancer genomics to the ways in which genomics is reshaping our perceptions of race, ethnicity, and ancestry. Each article will emphasize what can be done for patients today and provide a basis for understanding what will be possible for patients in the years to come.</p>
+
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+	var log = {}, startTime=0, endTime=0, error=0;
+	log.time = [],log.error = [];
+	var tasks = [20, 60, 77, 13, 89], targetPos;
+
+	var socket = io("localhost:3030");
+	//var socket = io("uxd5-game.iego.cn:3030");
+
+	var documentHeight = document.documentElement.scrollHeight
+
+	function startTask(pos){
+		targetPos = pos
+		alert("Please scroll the document to "+pos+"% of length!")
+		startTime = Date.now();
+	}
+
+	socket.on('confirm', function(confirm){
+			if(scrollPercent!=targetPos)
+				error++
+			else if(scrollPercent==targetPos){
+				endTime = Date.now();
+				log.time.push(endTime-startTime)
+				log.error.push(error)
+				error = 0;
+				alert("Success!")
+			}
+		})
+
+	document.onclick = function(){
+		if(scrollPercent!=targetPos)
+				error++
+			else if(scrollPercent==targetPos){
+				endTime = Date.now();
+				log.time.push(endTime-startTime)
+				log.error.push(error)
+				error = 0;
+				alert("Success!")
+			}
+    };
+
+	socket.on("task", function(task){
+		if(task==1)
+			startTask(tasks[0])
+		else if(task==2)
+			startTask(tasks[1])
+		else if(task==3)
+			startTask(tasks[2])
+		else if(task==4)
+			startTask(tasks[3])
+		else if(task==5)
+			startTask(tasks[4])
+		else if(task==6)
+			$("#result").text(JSON.stringify(log))
+	})
+
+
+	var oldMouseY, newMouseY;
+	var currentY=$(document).scrollTop();
+	socket.on('touchY', function(mouseY, height){
+			console.log(oldMouseY, newMouseY)
+			var offset=0
+			oldMouseY=newMouseY
+			newMouseY=mouseY
+			offset = (oldMouseY-newMouseY)/height*300;
+			currentY += offset
+			if(currentY<0)
+				currentY=0
+			else if(currentY>$(document).height())
+				currentY=$(document).height()
+        	window.scrollTo(0,currentY)
+        });
+
+	socket.on("moveStart", function(midX, midY){
+		oldMouseY=midY;
+		newMouseY=midY;		
+	})
+
+   $(window).scroll(function(){
+		var targetPercentage = 70;
+		var navBarHeight = 66;
+		var targetID = "#navigation";
+		var scrollTo = $(window).scrollTop(),
+		docHeight = $(document).height(),
+		windowHeight = $(window).height();
+		scrollPercent = (scrollTo / (docHeight-windowHeight)) * 100;
+		scrollPercent = scrollPercent.toFixed(0);
+		$('#percentageCounter h1').text(scrollPercent+"%");
+		if(scrollPercent > targetPercentage){
+			$(targetID).css({top:'0'});
+		}
+		if(scrollPercent < targetPercentage){
+			$(targetID).css({ top: '-'+navBarHeight+'px' });
+		}
+	}).trigger('scroll');
+</script>
+<div style="text-align:center;margin:50px 0; font:normal 14px/24px 'MicroSoft YaHei';">
+<p id="result"></p>
+</div>
+</body>
+</html>

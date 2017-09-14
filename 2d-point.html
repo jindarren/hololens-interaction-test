@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <title>three.js webgl - geometry - cube</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+      body {
+        background-color: #000000;
+        overflow: hidden;
+      }
+      p{
+        color: white;
+        font-size: 2vw;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+  
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="data-gui.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+
+      document.body.addEventListener('touchmove', function(event) {
+        event.preventDefault();
+      }, false);
+
+      var socket = io("localhost:3030");
+      //var socket = io("uxd5-game.iego.cn:3030");
+
+      var accX=0, accY=0;
+      var magX=0, magY=0, magZ=0;
+      var movable = false;
+      var cursorX, cursorY;
+
+      var log = {}, startTime=0, endTime=0, error=0;
+          log.time = [],log.error = [];
+
+
+      window.addEventListener("load", windowLoadHandler, false);
+      var Debugger = function() { };
+      Debugger.log = function(message) {
+        try {
+          console.log(message);
+        }
+        catch (exception) {
+          return;
+        }
+      }
+
+      function windowLoadHandler() {
+        canvasApp();
+      }
+
+      function canvasApp() {
+        
+        var theCanvas = document.getElementById("myCanvas");
+        var context = theCanvas.getContext("2d");
+        theCanvas.width = window.innerWidth
+        theCanvas.height = window.innerHeight
+                
+        var numShapes;
+        var shapes;
+        var dragIndex;
+        var dragging=false;
+        var mouseX;
+        var mouseY;
+        var dragHoldX;
+        var dragHoldY;
+
+
+        var setting = {
+            Point: false,
+        };
+
+        //Add user interface for adding or removing the objects from the scene
+        var gui = new dat.gui.GUI();
+        gui.remember(setting);
+
+        gui.add(setting, 'Point').onFinishChange(function (isChecked) {
+            if (isChecked) {
+              initPoint()
+            } else {
+              $("#myCanvas").unbind("mousedown");
+            }
+        });
+
+        function init() {
+          numShapes = 5;
+          shapes = [];
+
+          makeShapes();
+          drawScreen();
+        }
+
+        $("canvas").height(window.innerHeight*0.9)
+
+
+
+        function startTask(){
+          startTime = Date.now();
+          init();
+      }
+
+      socket.on("task", function(task){
+        if(task==1)
+          startTask()
+        else if(task==2)
+          startTask()
+        else if(task==3)
+          startTask()
+        else if(task==4)
+          startTask()
+        else if(task==5)
+          startTask()
+        else if(task==6)
+          $("#result").text(JSON.stringify(log))
+      })
+
+        socket.on('confirm', function(confirm){
+          var i;
+          //We are going to pay attention to the layering order of the objects so that if a mouse down occurs over more than object,
+          //only the topmost one will be dragged.
+          var highestIndex = -1;
+          
+          //getting mouse position correctly, being mindful of resizing that may have occured in the browser:
+          var bRect = theCanvas.getBoundingClientRect();
+          mouseX = cursorX
+          mouseY = cursorY
+          
+          Array.prototype.remove = function(val) {
+            var index = this.indexOf(val);
+            if (index > -1) {
+            this.splice(index, 1);
+            }
+          };
+
+          //find which shape was clicked
+          for (i=0; i < shapes.length; i++) {
+            if  (hitTest(shapes[i], mouseX, mouseY)) {
+              shapes.remove(shapes[i])
+                if(shapes.length==0){
+                  endTime = Date.now();
+                  log.time.push(endTime-startTime)
+                  log.error.push(error)
+                  error = 0;
+                }
+            }
+            else{
+              error++
+            }
+          }
+          drawScreen()
+        })
+
+        var oldMouseY, newMouseY;
+        var posY=theCanvas.height/2;
+        socket.on('touchY', function(mouseY, height){
+            //getting mouse position correctly 
+            var offset=0
+            oldMouseY=newMouseY
+            newMouseY=mouseY
+            offset = (newMouseY-oldMouseY)/height*300;
+            
+            //clamp x and y positions to prevent object from dragging outside of canvas
+            posY += offset;
+            if(posY<0)
+              posY=0
+            else if(posY>window.innerHeight)
+              posY=window.innerHeight
+            cursorY = posY;
+
+            if(dragging)
+              shapes[dragIndex].y = cursorY;   
+            drawScreen();
+          
+        });
+
+      var oldMouseX, newMouseX;
+      var posX = theCanvas.width/2;
+      socket.on('touchX', function(mouseX, width){
+            //getting mouse position correctly 
+            var offset=0
+            oldMouseX=newMouseX
+            newMouseX=mouseX
+            offset = (newMouseX-oldMouseX)/width*300;
+            posX += offset
+            if(posX<0)
+              posX=0
+            else if(posX>window.innerWidth)
+              posX=window.innerWidth
+            //clamp x and y positions to prevent object from dragging outside of canvas
+            cursorX = posX;
+            if(dragging)
+              shapes[dragIndex].x = cursorX;
+            drawScreen();
+          
+        });
+
+      socket.on("moveStart", function(midX, midY){
+          oldMouseX=midX;
+          newMouseX=midX;
+          oldMouseY=midY;
+          newMouseY=midY;
+      })
+
+
+        function initMove(){
+          $("#myCanvas").bind("mousedown", function(e){
+            mouseDownListener(e)
+          });
+          $("#myCanvas").bind("mousemove", function(e){
+            mouseMoveListener(e)
+          });
+        }
+
+        function initPoint(){
+          $("#myCanvas").bind("mousedown", function(e){
+            mouseDownListenerForPoint(e)
+          });
+        }
+        
+        function makeShapes() {
+          var i;
+          var tempX;
+          var tempY;
+          var tempRad;
+          var tempR;
+          var tempG;
+          var tempB;
+          var tempColor;
+          for (i=0; i < numShapes; i++) {
+            tempRad = 10 + Math.floor(Math.random()*40);
+            tempX = Math.random()*(theCanvas.width - 2*tempRad);
+            tempY = Math.random()*(theCanvas.height - 2*tempRad);
+            tempR = Math.floor(Math.random()*255);
+            tempG = Math.floor(Math.random()*255);
+            tempB = Math.floor(Math.random()*255);
+            tempColor = "rgb(" + tempR + "," + tempG + "," + tempB +")";
+            tempShape = {x:tempX, y:tempY, rad:tempRad, color:tempColor};
+            shapes.push(tempShape);
+          }
+        }
+
+        function mouseDownListener(evt) {
+          var i;
+          //We are going to pay attention to the layering order of the objects so that if a mouse down occurs over more than object,
+          //only the topmost one will be dragged.
+          var highestIndex = -1;
+          
+          //getting mouse position correctly, being mindful of resizing that may have occured in the browser:
+          var bRect = theCanvas.getBoundingClientRect();
+          mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
+          mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
+              
+          //find which shape was clicked
+          for (i=0; i < numShapes; i++) {
+            if  (hitTest(shapes[i], mouseX, mouseY)) {
+              if(dragging)
+                dragging = false;
+              else
+                dragging = true;
+              if (i > highestIndex) {
+                //We will pay attention to the point on the object where the mouse is "holding" the object:
+                dragHoldX = mouseX - shapes[i].x;
+                dragHoldY = mouseY - shapes[i].y;
+                highestIndex = i;
+                dragIndex = i;
+              }
+            }
+          }
+          
+          //code below prevents the mouse down from having an effect on the main browser window:
+          if (evt.preventDefault) {
+            evt.preventDefault();
+          } //standard
+          else if (evt.returnValue) {
+            evt.returnValue = false;
+          } //older IE
+          return false;
+        }
+        
+        function mouseDownListenerForPoint(evt) {
+          var i;
+          //We are going to pay attention to the layering order of the objects so that if a mouse down occurs over more than object,
+          //only the topmost one will be dragged.
+          var highestIndex = -1;
+          
+          //getting mouse position correctly, being mindful of resizing that may have occured in the browser:
+          var bRect = theCanvas.getBoundingClientRect();
+          mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
+          mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
+          
+          Array.prototype.remove = function(val) {
+            var index = this.indexOf(val);
+            if (index > -1) {
+            this.splice(index, 1);
+            }
+          };
+
+          //find which shape was clicked
+          for (i=0; i < shapes.length; i++) {
+            if  (hitTest(shapes[i], mouseX, mouseY)) {
+              shapes.remove(shapes[i])
+
+            error = 0;
+            if(shapes.length==0){
+              endTime = Date.now();
+              log.time.push(endTime-startTime)
+              log.error.push(error)
+            }
+            }
+            else{
+              error++
+            }
+          }
+          drawScreen()
+
+          
+          //code below prevents the mouse down from having an effect on the main browser window:
+          if (evt.preventDefault) {
+            evt.preventDefault();
+          } //standard
+          else if (evt.returnValue) {
+            evt.returnValue = false;
+          } //older IE
+          return false;
+        }
+
+        function mouseMoveListener(evt) {
+          if(dragging){
+            var posX;
+            var posY;
+            var shapeRad = shapes[dragIndex].rad;
+            var minX = shapeRad;
+            var maxX = theCanvas.width - shapeRad;
+            var minY = shapeRad;
+            var maxY = theCanvas.height - shapeRad;
+            //getting mouse position correctly 
+            var bRect = theCanvas.getBoundingClientRect();
+            mouseX = (evt.clientX - bRect.left)*(theCanvas.width/bRect.width);
+            mouseY = (evt.clientY - bRect.top)*(theCanvas.height/bRect.height);
+            
+            //clamp x and y positions to prevent object from dragging outside of canvas
+            posX = mouseX - dragHoldX;
+            posX = (posX < minX) ? minX : ((posX > maxX) ? maxX : posX);
+            posY = mouseY - dragHoldY;
+            posY = (posY < minY) ? minY : ((posY > maxY) ? maxY : posY);
+            
+            shapes[dragIndex].x = posX;
+            shapes[dragIndex].y = posY;
+            
+            drawScreen();
+          }
+        }
+
+        function hitTest(shape,mx,my) {
+          
+          var dx;
+          var dy;
+          dx = mx - shape.x;
+          dy = my - shape.y;
+        
+          //a "hit" will be registered if the distance away from the center is less than the radius of the circular object    
+          return (dx*dx + dy*dy < shape.rad*shape.rad);
+        }
+        
+        function drawShapes() {
+          var i;
+          for (i=0; i < shapes.length; i++) {
+            context.fillStyle = shapes[i].color;
+            context.beginPath();
+            context.arc(shapes[i].x, shapes[i].y, shapes[i].rad, 0, 2*Math.PI, false);
+            context.closePath();
+            context.fill();
+          }
+
+          context.beginPath();
+          context.arc(cursorX, cursorY, 5, 0, 2 * Math.PI, false);
+          context.lineWidth = 1;
+          context.strokeStyle = "#CCFB15";
+          context.stroke();
+        }
+        
+        function drawScreen() {
+          //bg
+          context.fillStyle = "#000000";
+          context.fillRect(0,0,theCanvas.width,theCanvas.height);
+          drawShapes();
+        }
+        
+      }
+
+    </script>
+    <canvas id="myCanvas"></canvas>
+    <p id="result"></p>
+  </body>
+</html>
